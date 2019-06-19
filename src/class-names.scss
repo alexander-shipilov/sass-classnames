@@ -1,0 +1,80 @@
+/// @access private
+///
+/// @param { string }
+/// @return { list }
+///
+@function -class-names-parse($value) {
+  @return selector-parse(if(str-slice($value, 1, 1) == '.', $value, '.#{ $value }'));
+}
+
+/// @group class-names
+/// @access private
+@function -class-names-append($class-names, $selectors) {
+  @each $selector in $selectors {
+    @if ($selector != null) {
+      $class-names: append($class-names, $selector);
+    }
+  }
+
+  @return $class-names;
+}
+
+/// Creates selector from the given values
+///
+/// @param { string | list | arglist | map } $class-value...
+/// @return { list | null }
+///
+/// @example
+///
+///   @debug class-names(foo); // .foo
+///   @debug class-names(foo, bar); // .foo.bar
+///   @debug class-names(foo bar, ted); // .foo.bar.ted
+///
+///   // dictionary
+///   @debug class-names((foo: true, bar: false)); // .foo
+///   @debug class-names(foo, (bar: true, baz: false, ted: 1)); // .foo.bar.ted
+///   @debug class-names(foo, $bar: true, $baz: false, $ted: 1); // .foo.bar.ted
+///
+@function class-names($class-values...) {
+  $keywords: keywords($class-values);
+  $length: length($class-values);
+
+  $class-names: ();
+
+  @for $index from 1 to $length + 1 {
+    $class-value: nth($class-values, $index);
+    $class-type: type-of($class-value);
+    $class-name: null;
+
+    @if ($class-type == 'string') {
+      // string / number
+      @if ($class-value != '') {
+        $class-name: -class-names-parse('#{ $class-value }');
+      }
+    } @else if ($class-type == 'list' or $class-type == 'arglist') {
+      // list / arglist
+      $class-name: class-names($class-value...);
+    } @else if ($class-type == 'map') {
+      // map
+      $map-class-names: ();
+
+      @each $name, $value in $class-value {
+        @if ($value != null and $value != false and $value != '' and $value != 0) {
+          $map-class-names: append($map-class-names, '#{ $name }');
+        }
+      }
+
+      @if (length($map-class-names) != 0) {
+        $class-name: class-names($map-class-names...);
+      }
+    }
+
+    $class-names: -class-names-append($class-names, $class-name);
+  }
+
+  @if (length($keywords) != 0) {
+    $class-names: -class-names-append($class-names, class-names($keywords));
+  }
+
+  @return if(length($class-names) == 0, null, selector-append($class-names...));
+}

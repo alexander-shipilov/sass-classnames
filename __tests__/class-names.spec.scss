@@ -1,0 +1,106 @@
+@import "-true";
+@import "class-names";
+
+@function -arglist($arglist...) {
+  $keys: keywords($arglist);
+
+  @return $arglist;
+}
+
+@include describe('class-names($class-values...)') {
+  @include it('returns null for an empty configuration') {
+    @include assert-equal(class-names(), null);
+    @include assert-equal(class-names(()), null);
+  }
+
+  @include it('ignores unsopported types') {
+    @include assert-equal(class-names(true, false, 1, #fff, get-function(call)), null);
+  }
+
+  @include it('keeps map keys with truthy values') {
+    @include assert-equal-selector(class-names((a: true, b: false, c: 0, d: null, e: 1)), '.a.e');
+  }
+
+  @include it('keeps keywords with truthy values') {
+    @include assert-equal-selector(class-names($a: true, $b: false, $c: 0, $d: null, $e: 1), '.a.e');
+  }
+
+  @include it('joins lists of class names and ignore falsy values') {
+    @include assert-equal-selector(class-names(a, 0, null, true, 'b'), '.a.b');
+  }
+
+  @include it('supports heterogenous arguments') {
+    @include assert-equal-selector(class-names((a: true), 'b', 0), '.a.b');
+  }
+
+  @include it('should be trimmed') {
+    @include assert-equal-selector(class-names('', 'b', (), ''), '.b');
+  }
+
+  @include it('supports an array of class names') {
+    @include assert-equal-selector(class-names(a b), '.a.b');
+    @include assert-equal-selector(class-names((a, b)), '.a.b');
+    @include assert-equal-selector(class-names(('a', 'b')), '.a.b');
+  }
+
+  @include it('supports an arglists of class names') {
+    @include assert-equal-selector(class-names(-arglist(a, b)), '.a.b');
+    @include assert-equal-selector(class-names(-arglist(a, b, $c: 1, $d: 0)), '.a.b.c');
+  }
+
+  @include it('joins array arguments with string arguments') {
+    @include assert-equal-selector(class-names(a b, c), '.a.b.c');
+    @include assert-equal-selector(class-names(c, a b), '.c.a.b');
+  }
+
+  @include it('handles multiple array arguments') {
+    @include assert-equal-selector(class-names((a b), (c d)), '.a.b.c.d');
+  }
+
+  @include it('handles lists that include falsy and true values') {
+    @include assert-equal-selector(class-names((a, 0, null, false, true, b)), '.a.b');
+  }
+
+  @include it('handles lists that include lists') {
+    @include assert-equal-selector(class-names((a, (b, c))), '.a.b.c');
+  }
+
+  @include it('handles lists that include maps') {
+    @include assert-equal-selector(class-names((a, (b: true, c: false))), '.a.b');
+  }
+
+  @include it('handles deep array recursion') {
+    @include assert-equal-selector(class-names((a, (b, (c, (d: true))))), '.a.b.c.d');
+  }
+
+  @include it('handles lists that are empty') {
+    @include assert-equal-selector(class-names(a, ()), '.a');
+  }
+
+  @include it('handles nested lists that have empty nested lists') {
+    @include assert-equal-selector(class-names(a, ((),)), '.a');
+  }
+
+  @include it('handles all types of truthy and falsy property values as expected') {
+    @include assert-equal-selector(
+        class-names((
+          // falsy:
+          null: null,
+          false: false,
+          empty-string: "",
+          zero: 0,
+          negative-zero: -0,
+          // truthy (literally anything else):
+          non-empty-string:"foobar",
+          whitespace: ' ',
+          function: get-function('call'),
+          empty-map: map-merge((), ()),
+          non-empty-map: (a:1, b:2),
+          empty-list: (),
+          non-empty-list: (1, 2, 3),
+          greater-zero: 1
+        )),
+        '.non-empty-string.whitespace.function.empty-map.non-empty-map.empty-list.non-empty-list.greater-zero'
+    );
+  }
+}

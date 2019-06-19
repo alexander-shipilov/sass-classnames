@@ -1,0 +1,10 @@
+## external dependencies
+**/node_modules
+
+## common annoying files
+**/yarn-error.log
+**/npm-debug.log
+**/.vscode
+
+## project-specific ignored files
+.idea/
