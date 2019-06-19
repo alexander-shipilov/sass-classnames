@@ -1,6 +1,6 @@
 {
-  "name": "sass-classnames",
-  "version": "1.0.0",
+  "name": "@helioscompanies/sass-classnames",
+  "version": "1.0.1",
   "description": "Sass implementation of classnames",
   "main": "index.scss",
   "scripts": {
@@ -30,5 +30,8 @@
     "sass": "^1.21.0",
     "sass-true": "^5.0.0"
   },
-  "dependencies": {}
+  "dependencies": { },
+  "publishConfig": {
+    "access": "public"
+  }
 }

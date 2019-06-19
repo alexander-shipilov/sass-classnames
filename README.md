@@ -1,7 +1,7 @@
 sass-classnames
 ===========
 
-[![Version](http://img.shields.io/npm/v/sass-classnames.svg)](https://www.npmjs.org/package/sass-classnames)
+[![Version](http://img.shields.io/npm/v/@helioscompanies/sass-classnames.svg)](https://www.npmjs.org/package/@helioscompanies/sass-classnames)
 
 [Sass](https://sass-lang.com/) implementation of [classnames](https://www.npmjs.org/package/classnames).
 
@@ -9,17 +9,17 @@ Install with [npm](https://www.npmjs.com/), [Bower](https://bower.io/), or [Yarn
 
 npm:
 ```sh
-npm install sass-classnames
+npm install @helioscompanies/sass-classnames
 ```
 
 Bower:
 ```sh
-bower install sass-classnames
+bower install @helioscompanies/sass-classnames
 ```
 
 Yarn (note that `yarn add` automatically saves the package to the `dependencies` in `package.json`):
 ```sh
-yarn add sass-classnames
+yarn add @helioscompanies/sass-classnames
 ```
 
 ## Usage
@@ -77,7 +77,7 @@ Lists will be recursively flattened as per the rules above:
 Real-world example:
 
 ```scss
-@import "node-modules/sass-classnames/index";
+@import "node-modules/@helioscompanies/sass-classnames/index";
 
 #{ class-names(message) } { color: #000; }
 #{ class-names(message, error) } { color: red; }
