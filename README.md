@@ -5,16 +5,11 @@ sass-classnames
 
 [Sass](https://sass-lang.com/) implementation of [classnames](https://www.npmjs.org/package/classnames).
 
-Install with [npm](https://www.npmjs.com/), [Bower](https://bower.io/), or [Yarn](https://yarnpkg.com/):
+Install with [npm](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/):
 
 npm:
 ```sh
 npm install @helioscompanies/sass-classnames
-```
-
-Bower:
-```sh
-bower install @helioscompanies/sass-classnames
 ```
 
 Yarn (note that `yarn add` automatically saves the package to the `dependencies` in `package.json`):

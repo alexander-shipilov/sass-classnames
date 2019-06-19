@@ -1,6 +1,6 @@
 {
   "name": "@helioscompanies/sass-classnames",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Sass implementation of classnames",
   "main": "index.scss",
   "scripts": {
